@@ -1,0 +1,544 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cryoprison</name>
+    </assembly>
+    <members>
+        <member name="T:Cryoprison.Factory">
+            <summary>
+            Cross Cryoprison
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Factory.IsSupported">
+            <summary>
+            Gets if the plugin is supported on the current platform.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Factory.Current">
+            <summary>
+            Current plugin implementation to use
+            </summary>
+        </member>
+        <member name="T:Cryoprison.CryoprisonImplementation">
+            <summary>
+            Interface for $safeprojectgroupname$
+            </summary>
+        </member>
+        <member name="T:Cryoprison.IJailbreakDetector">
+            <summary>
+            The actual public, platform independent, interface for jailbreak detectors.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.IJailbreakDetector.Refresh">
+            <summary>
+            Refresh the detector, causing it to re-run detection logic the
+            next time it is asked whether the device is jailbroken or not, or
+            what the violations are.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.IJailbreakDetector.IsJailbroken">
+            <summary>
+            Determines if the device is jailbroken or not, running the jailbreak
+            detection code if neccessary.  The results are cached.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.IJailbreakDetector.Violations">
+            <summary>
+            Gets the violations, assuming that the device is jailbroken, as
+            check IDs.  Runs the jailbreak detection code if neccessary, and
+            caches the results.
+            </summary>
+        </member>
+        <member name="T:Cryoprison.Checks">
+            <summary>
+            A FluentApi factory for building up a collection of checks to be performed
+            when performing a jailbreak test.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Checks.checks">
+            <summary>
+            The list of checks in this fluent factory
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Checks.rootPaths">
+            <summary>
+            The root paths to search.  When a check is added, a version with
+            each root path is used.  If there is a seperator required, then the
+            caller must either always include it in the root paths, or always
+            include it in the added values.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Checks.AddRoots(System.String[])">
+            <summary>
+            Adds the specified roots to our root paths collection.
+            </summary>
+            <returns>The Checks factory itself (this) for continued fluent operations</returns>
+            <param name="roots">The roots to add</param>
+        </member>
+        <member name="M:Cryoprison.Checks.Add(System.String,System.String)">
+            <summary>
+            Add an individual check to the factory
+            </summary>
+            <returns>The Checks factory itself (this) for continued fluent operations</returns>
+            <param name="checkId">The check ID.</param>
+            <param name="val">The value, or parameter used when instantiating the inspector.</param>
+        </member>
+        <member name="M:Cryoprison.Checks.Add(System.String,System.String[])">
+            <summary>
+            Add a collection of checks to the factory
+            </summary>
+            <returns>The Checks factory itself (this) for continued fluent operations</returns>
+            <param name="checkId">The check ID.</param>
+            <param name="val">The values, or parameters used when instantiating the inspectors.</param>
+        </member>
+        <member name="M:Cryoprison.Checks.GetInspectors``1">
+            <summary>
+            Gets the instantiated, initialized inspectors that have been declared
+            via Add statements.
+            </summary>
+        </member>
+        <member name="T:Cryoprison.Inspectors.DirectoryNotPresent">
+            <summary>
+            Detects whether a directory is present, and reports a jailbreak if it
+            is not.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.DirectoryNotPresent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.Inspectors.DirectoryNotPresent"/> class.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.DirectoryNotPresent.Ok">
+            <summary>
+            Returns true if the directory identified by 'val' during initialization
+            is not present, otherwise false.  This will cause the check to run.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.DirectoryNotPresent.IsDirectoryPresent(System.String)">
+            <summary>
+            Determines if the directory is actually present
+            </summary>
+            <param name="path">The full path.</param>
+        </member>
+        <member name="T:Cryoprison.Inspectors.FileNotAccessible">
+            <summary>
+            Detects whether or not a file is accessible, that is can be opened for
+            reading
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.FileNotAccessible.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.Inspectors.FileNotAccessible"/> class.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.FileNotAccessible.Ok">
+            <summary>
+            Returns true if the directory identified by 'val' during initialization
+            is not present, otherwise false.  This will cause the check to run.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Cryoprison.Inspectors.FileNotAccessible.IsFileAccessible(System.String)" -->
+        <member name="T:Cryoprison.Inspectors.FileNotDestructivelyWritable">
+            <summary>
+            Detects whether or not a file is writable, that is can be created,
+            written to and delete.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.FileNotDestructivelyWritable.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.Inspectors.FileNotDestructivelyWritable"/> class.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.FileNotDestructivelyWritable.Ok">
+            <summary>
+            Returns true if the file identified by 'val' during initialization
+            can not be created, written to and deleted.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.FileNotDestructivelyWritable.IsFileDestructivelyWritable(System.String)">
+            <summary>
+            Determines if the file can be destructively written, that is
+            create, written to and deleted.
+            </summary>
+            <param name="path">The full path.</param>
+        </member>
+        <member name="T:Cryoprison.Inspectors.FileNotPresent">
+            <summary>
+            Determines if a file is present, reporting a jailbreak if it is.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.FileNotPresent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.Inspectors.FileNotPresent"/> class.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.FileNotPresent.Ok">
+            <summary>
+            Returns true if the file identified by 'val' during initialization
+            can not be created, written to and deleted.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.FileNotPresent.IsFilePresent(System.String)">
+            <summary>
+            Determines if the file is in deed present
+            </summary>
+            <param name="path">The full path of the file.</param>
+        </member>
+        <member name="T:Cryoprison.Inspectors.UrlNotOpenable">
+            <summary>
+            Determines if the url is openable, which would only be the case on
+            a jailbroken device.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.UrlNotOpenable.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.Inspectors.UrlNotOpenable"/> class.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.UrlNotOpenable.Ok">
+            <summary>
+            Returns true if the file identified by 'val' during initialization
+            can not be created, written to and deleted.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.UrlNotOpenable.CanOpenUrl(System.String)">
+            <summary>
+            Override this method in OS specific versions to perform the actual
+            url opening check.
+            </summary>
+            <param name="url">The url to check</param>
+        </member>
+        <member name="M:Cryoprison.Inspectors.UrlNotOpenable.IsUrlOpenable(System.String)">
+            <summary>
+            Determines if the URL is indeed openable, wrapped in the right
+            exception handling code.
+            </summary>
+            <param name="url">The url to check</param>
+        </member>
+        <member name="T:Cryoprison.Inspectors.PathNotSymbolicLink">
+            <summary>
+            Determines if the specified path is a symbolic link
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.PathNotSymbolicLink.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.Inspectors.PathNotSymbolicLink"/> class.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.PathNotSymbolicLink.Ok">
+            <summary>
+            Returns true if the file identified by 'val' during initialization
+            can not be created, written to and deleted.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Cryoprison.Inspectors.PathNotSymbolicLink.IsSymLink(System.String)" -->
+        <member name="M:Cryoprison.Inspectors.PathNotSymbolicLink.DoesPathPointToSymbolicLink(System.String)">
+            <summary>
+            Determines whether or not the path refers to a a symbolic link,
+            wrapped with all the niceties such as exception handling.
+            </summary>
+            <param name="path">The full path to the path to check.</param>
+        </member>
+        <member name="F:Cryoprison.Inspectors.InspectorBase.idFormat">
+            <summary>
+            Format string for the Id string, with a single {0} for the checkId
+            </summary>
+        </member>
+        <member name="F:Cryoprison.Inspectors.InspectorBase.checkId">
+            <summary>
+            The checkId, which is a subcomponent of the actual id
+            </summary>
+        </member>
+        <member name="F:Cryoprison.Inspectors.InspectorBase.id">
+            <summary>
+            The actual ID.
+            </summary>
+        </member>
+        <member name="F:Cryoprison.Inspectors.InspectorBase.val">
+            <summary>
+            The value, used to perform the actual check, that is a directory
+            path.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.InspectorBase.#ctor(System.String)">
+            <summary>
+            Base class constructor, uses the <paramref name="idFormat"/> format string
+            (which should have a single {0} field), to create the ID.
+            </summary>
+            <param name="idFormat">The format string for ids.</param>
+        </member>
+        <member name="M:Cryoprison.Inspectors.InspectorBase.Init(Cryoprison.Ex.Env,System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Cryoprison.Inspectors.InspectorBase.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Cryoprison.Inspectors.InspectorBase.Ok">
+            <inheritdoc/>
+        </member>
+        <member name="P:Cryoprison.Inspectors.InspectorBase.ReportException">
+            <summary>
+            Forward ReportException
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.InspectorBase.ReportJailbreak">
+            <summary>
+            Forward ReportJailbreak
+            </summary>
+        </member>
+        <member name="T:Cryoprison.Inspectors.ShouldBeMobileProvisioned">
+            <summary>
+            iOS specific check to determine if the app is has been provisioned for
+            mobile.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Inspectors.ShouldBeMobileProvisioned.Init(Cryoprison.Ex.Env,System.String,System.String)">
+            <summary>
+            Initialize the inspector.  This inspector does not have any need
+            for params really, so it ignores them.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Inspectors.ShouldBeMobileProvisioned.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Cryoprison.Inspectors.ShouldBeMobileProvisioned.Ok">
+            <inheritdoc/>
+        </member>
+        <member name="M:Cryoprison.Inspectors.ShouldBeMobileProvisioned.IsMobileProvisioned">
+            <summary>
+            Determines if the app is provisioned for mobile.
+            </summary>
+        </member>
+        <member name="T:Cryoprison.IInspector">
+            <summary>
+            The public interface for inspectors, which inspect the system to determine
+            if it is jailbroken.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.IInspector.Id">
+            <summary>
+            Gets the ID of the jailbreak and the inspector.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.IInspector.Ok">
+            <summary>
+            Gets a value indicating whether or not this inspector instance
+            believes that the system is jailbroken, running the test to do so.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.IInspector.Init(Cryoprison.Ex.Env,System.String,System.String)">
+            <summary>
+            Initializies the inspector with a <paramref name="checkId"/> that is
+            combined using internal, inspector dependent logic, to form the
+            Id, and with a value that is an extra argument
+            that may be interpreted in inspector-dependent fashions.
+            </summary>
+            <returns>The initialized inspector.</returns>
+            <param name="checkId">The check identifier.</param>
+            <param name="val">The path.</param>
+        </member>
+        <member name="T:Cryoprison.JailbreakDetector">
+            <summary>
+            Base class for platform specific jailbreak detectors
+            </summary>
+        </member>
+        <member name="F:Cryoprison.JailbreakDetector.jailbreaks">
+            <summary>
+            The jailbreaks that were detected, or null if we need to run the
+            inspection process first.
+            </summary>
+        </member>
+        <member name="F:Cryoprison.JailbreakDetector.inspectors">
+            <summary>
+            The inspectors that we use to detect jailbreaks.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.JailbreakDetector.AddInspectors(System.Collections.Generic.IEnumerable{Cryoprison.IInspector})">
+            <summary>
+            Call this method to add inspectors during construction.
+            </summary>
+            <param name="inspectors">The inspectors.</param>
+        </member>
+        <member name="M:Cryoprison.JailbreakDetector.Refresh">
+            <inheritdoc/>
+        </member>
+        <member name="P:Cryoprison.JailbreakDetector.Violations">
+            <inheritdoc/>
+        </member>
+        <member name="P:Cryoprison.JailbreakDetector.IsJailbroken">
+            <inheritdoc/>
+        </member>
+        <member name="M:Cryoprison.JailbreakDetector.Inspect(Cryoprison.IInspector)">
+            <summary>
+            Executes the specific inspector, wrapped with all the right reporting
+            code, to determine if the device is jailbroken in the fashion
+            that the inspector knows.
+            </summary>
+            <returns>The jailbreak ID, or null if the inspector does not believe
+            that the system is jailbroken.</returns>
+            <param name="inspector">The inspector.</param>
+        </member>
+        <member name="M:Cryoprison.JailbreakDetector.RunIfNeeded">
+            <summary>
+            Initializines the jailbreaks list by running the spectors, if neccessary.
+            Must be called under lock.
+            </summary>
+        </member>
+        <member name="T:Cryoprison.Check">
+            <summary>
+            A check is an id-value pair, identifying both the jailbreak and the
+            variant which is basically the parameter sent to the inspector.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Check.CheckId">
+            <summary>
+            The identifier of the check, which will be used to create the
+            identifier / jailbreak ID.  CheckId could e.g. be FOO while the
+            identifier / jailbreak ID could e.g. be derived to be
+            FILE_FOO_SHOULD_BE_PRESENT.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Check.Value">
+            <summary>
+            The value, or parameter used when instantiating the jailbreak
+            </summary>
+        </member>
+        <member name="T:Cryoprison.Ex.Reporter">
+            <summary>
+            A global reporting system, for exceptions and jailbreaks.  This is not
+            intended to be the actual return values of the system, but rather it
+            provides debugging / logging support hooks.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Ex.Reporter.OnJailbreakReported">
+            <summary>
+            Hook function to be called when a jailbreak is reported, with the
+            ID string of the jailbreak.  Set this value if you would like
+            to receive global jailbreak notifications.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.Ex.Reporter.OnExceptionReported">
+            <summary>
+            Hook function to be called when an exception is reported, with a
+            string identifying the context that caused the exception to be
+            raised and the actual exception.  Set this value if you would like
+            to receive global exception notifications.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.Ex.Reporter.ReportException(System.String,System.Exception)">
+            <summary>
+            Used internally to report exceptions.
+            </summary>
+            <param name="message">The context that the exception was raised in.</param>
+            <param name="exception">The actual exception.</param>
+        </member>
+        <member name="M:Cryoprison.Ex.Reporter.ReportJailbreak(System.String)">
+            <summary>
+            Used internally to report jailbreaks.
+            </summary>
+            <param name="id">The jailbreak ID string.</param>
+        </member>
+        <member name="T:Cryoprison.iOS.JailbreakDetector">
+            <summary>
+            iOS implementation of the Jailbreak Detector.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.DirectoriesShouldNotBePresent">
+            <summary>
+            These directories should not be present in the first place.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.FilesShouldNotBeAccessible">
+            <summary>
+            These files should never be accessible.  That is, we shouldn't be
+            able to read them.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.DeveloperFilesShouldNotBeAccessible">
+            <summary>
+            The following files are used for development, and should only be
+            readable on simulators.  If we are running in 'simulator friendly'
+            mode, then we won't check that they exist.  Very similar to the
+            not-present check, but tests whether we can open and read them.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.FilesShouldNotBeDestructivelyWritable">
+            <summary>
+            The following locations should be read-only, and thus we shouldn't
+            be able to create / write / delete these files.  Note, we will
+            try to delete these files, so don't add anything here that is not
+            supposed to be destroyed.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.FilesShouldNotBePresent">
+            <summary>
+            The following files are found on jailbroken devices.  Mostly these
+            are related to specific apps / package managers
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.DeveloperFilesShouldNotBePresent">
+            <summary>
+            The following files are used for development, and should only be
+            present on simulators.  If we are running in 'simulator friendly'
+            mode, then we won't check that they exist.  Very similar to the
+            not-accessible check, but tests whether we can find them in a
+            directory listing.
+            </summary>
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.UrlsShouldNotBeOpenable">
+             <summary>
+             The following urls should not be openable by the app.  Cydia is a
+             jailbreak package manager which exposes the cydia uri scheme.  It
+             should obviously not be installed.
+             
+             REMEMBER: add cydia to info.plist to be able to detect its presence,
+             otherwise iOS will falsely report that the url can't be opened after
+             a moderate amount of checks have been made:
+                        
+                <key>LSApplicationQueriesSchemes</key>
+                <array>
+                    <string>cydia</string>
+                </array>
+             </summary>
+            
+        </member>
+        <member name="P:Cryoprison.iOS.JailbreakDetector.PathsShouldNotBeSymbolicLinks">
+            <summary>
+            The following paths are sometimes turned into symbolic links on
+            jailbroken devices.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.iOS.JailbreakDetector.#ctor(Cryoprison.Ex.Env,System.Nullable{System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cryoprison.iOS.JailbreakDetector"/> class.
+            By default, the jailbreak detector will be 'simulator friendly'
+            when built in debug mode, and hostile towards the simulator in release
+            builds.  This is intended to aid debugging, since the simulator will
+            appear to be jailbroken due to installed debugging tools.
+            </summary>
+            <param name="simulatorFriendly">Simulator friendly.</param>
+        </member>
+        <member name="T:Cryoprison.iOS.PlatformSpecific.PathNotSymbolicLink">
+            <summary>
+            iOS specific version of performing a jailbreak check by determining
+            if a path is a symbolic link
+            </summary>
+        </member>
+        <member name="M:Cryoprison.iOS.PlatformSpecific.PathNotSymbolicLink.IsSymLink(System.String)">
+            <summary>
+            Determines if the path is a symbolic link, iOS style.
+            </summary>
+        </member>
+        <member name="T:Cryoprison.iOS.PlatformSpecific.UrlNotOpenable">
+            <summary>
+            iOS specific implementation to determine if the specified URL can
+            be opened.
+            </summary>
+        </member>
+        <member name="M:Cryoprison.iOS.PlatformSpecific.UrlNotOpenable.CanOpenUrl(System.String)">
+            <summary>
+            Determines if the url in question can indeed be opened, iOS style.
+            </summary>
+        </member>
+    </members>
+</doc>
